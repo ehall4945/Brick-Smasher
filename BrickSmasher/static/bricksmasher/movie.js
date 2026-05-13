@@ -24,6 +24,7 @@ function renderMovies(movies) {
             <td>${movie.checked_out}</td>
             <td class="clickable" data-action="add" data-id="${movie.id}">+</td>
             <td class="clickable" data-action="remove" data-id="${movie.id}">-</td>
+            <td class="clickable" data-action="delete" data-id="${movie.id}">Delete</td>
         `;
 
         tableBody.appendChild(row);
@@ -71,6 +72,7 @@ function updateMovie(action, id = null, title = null) {
         .catch(() => showMessage("Could not update movie data", "error"));
 }
 
+
 document.querySelector("#movie-form").addEventListener("submit", function (event) {
     // Adds a new movie from the title input
     event.preventDefault();
@@ -80,13 +82,21 @@ document.querySelector("#movie-form").addEventListener("submit", function (event
     titleInput.value = "";
 });
 
+
 document.querySelector("#movie-table-body").addEventListener("click", function (event) {
     // Handles add and remove clicks from the movie table
     if (!event.target.classList.contains("clickable")) {
         return;
     }
 
-    updateMovie(event.target.dataset.action, event.target.dataset.id);
+    const { action, id, title } = event.target.dataset;
+
+    if (action === "delete") {
+        const confirmed = confirm(`Remove "${title}" from the inventory entirely?\n\nThis cannot be undone.`);
+        if (!confirmed) return;
+    }
+
+    updateMovie(action, id);
 });
 
 loadMovies();

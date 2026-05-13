@@ -21,6 +21,7 @@ BrickSmasher is a Django project for a simple VHS movie rental management system
 ```text
 BrickSmasher/
   manage.py
+  requirements.txt
   README.md
 
   BrickSmasher/

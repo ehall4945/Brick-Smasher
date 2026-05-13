@@ -124,7 +124,3 @@ Open the admin panel:
 ```text
 http://127.0.0.1:8000/admin/
 ```
-
-## Notes
-
-This project is intended as a clean boilerplate starting point for the BrickSmasher assignment. It includes the main Django project structure, app structure, models, routes, templates, static files, and AJAX endpoint scaffolding needed to continue development.

@@ -21,9 +21,8 @@ function renderCheckedOut(checkouts) {
         const row = document.createElement("tr");
 
         row.innerHTML = `
-            <td class="clickable" data-action="return" data-movie="${item.movie}">
-                ${item.title}
-            </td>
+            <td>${item.title}</td>
+            <td class="clickable" data-action="return" data-movie="${item.movie}">Return</td>
         `;
 
         tableBody.appendChild(row);
@@ -41,10 +40,9 @@ function renderAvailableMovies(movies) {
             const row = document.createElement("tr");
 
             row.innerHTML = `
-                <td class="clickable" data-action="rent" data-movie="${movie.id}">
-                    ${movie.title}
-                </td>
+                <td>${movie.title}</td>
                 <td>${movie.in_stock}</td>
+                <td class="clickable" data-action="rent" data-movie="${movie.id}">Rent</td>
             `;
 
             tableBody.appendChild(row);

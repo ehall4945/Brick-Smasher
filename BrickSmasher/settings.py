@@ -14,7 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "bricksmasher",
+    "BrickSmasher",
 ]
 
 # Middleware used by Django for requests, sessions, messages, and security

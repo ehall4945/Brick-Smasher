@@ -1,0 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Movies</title>
+    <link rel="stylesheet" href="{% static 'bricksmasher/style.css' %}">
+    <script src="{% static 'bricksmasher/movie.js' %}" defer></script>
+</head>
+<body>
+    <main class="container">
+        <a class="home-link" href="{% url 'home' %}">Back to Home</a>
+
+        <h1>Manage Movies</h1>
+
+        <form id="movie-form" method="post">
+            {% csrf_token %}
+
+            <label for="movie-title">New Movie Title</label>
+            <input id="movie-title" name="title" type="text">
+
+            <button type="submit">Add Movie</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Movie Title</th>
+                    <th>In Stock</th>
+                    <th>Checked Out</th>
+                    <th>Add</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody id="movie-table-body"></tbody>
+        </table>
+
+        <p id="movie-message" class="message" aria-live="polite"></p>
+    </main>
+</body>
+</html>

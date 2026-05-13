@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="{% static 'bricksmasher/style.css' %}">
+    <script src="{% static 'bricksmasher/account.js' %}" defer></script>
+</head>
+<body>
+    <main class="container">
+        <a class="home-link" href="{% url 'home' %}">Back to Home</a>
+
+        <h1>Create Account</h1>
+
+        <form id="account-form" method="post">
+            {% csrf_token %}
+
+            <label for="first-name">First Name</label>
+            <input id="first-name" name="first_name" type="text" required>
+
+            <label for="last-name">Last Name</label>
+            <input id="last-name" name="last_name" type="text" required>
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <p id="account-message" class="message" aria-live="polite"></p>
+    </main>
+</body>
+</html>

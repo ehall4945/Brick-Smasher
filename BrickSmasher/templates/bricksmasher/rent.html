@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent / Return Movies</title>
+    <link rel="stylesheet" href="{% static 'bricksmasher/style.css' %}">
+    <script src="{% static 'bricksmasher/rent.js' %}" defer></script>
+</head>
+<body>
+    <main class="container">
+        <form class="hidden">
+            {% csrf_token %}
+        </form>
+
+        <a class="home-link" href="{% url 'home' %}">Back to Home</a>
+
+        <h1>Rent / Return Movies</h1>
+
+        <form id="user-search-form" method="get">
+            <label for="member-email">Member Email</label>
+            <input id="member-email" name="email" type="email" required>
+
+            <button type="submit">Find Member</button>
+        </form>
+
+        <section id="member-section" class="hidden">
+            <h2 id="member-name"></h2>
+
+            <h3>Checked Out Movies</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Movie Title</th>
+                    </tr>
+                </thead>
+                <tbody id="checked-out-body"></tbody>
+            </table>
+
+            <h3>Available Movies</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Movie Title</th>
+                        <th>In Stock</th>
+                    </tr>
+                </thead>
+                <tbody id="available-movies-body"></tbody>
+            </table>
+        </section>
+
+        <p id="rent-message" class="message" aria-live="polite"></p>
+    </main>
+</body>
+</html>

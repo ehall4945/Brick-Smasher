@@ -160,6 +160,8 @@ def db_movie(request):
         problem = change_movie_stock(request, amount=1)
     elif action == "remove":
         problem = change_movie_stock(request, amount=-1)
+    elif action == "delete":
+        problem = delete_movie(request)
     else:
         return error("Invalid movie action")
 
@@ -173,14 +175,32 @@ def create_movie(request):
     # Adds a new movie with one copy in stock
     title = request.POST.get("title", "").strip()
 
+    # Ensures you can't add a blank movie title or one that exceeds 75 chars
     if not title:
         return error("Movie title cannot be blank")
+    
+    if len(title) > 75:
+        return error("Movie title cannot be longer than 75 characters")
 
     try:
         Movie.objects.create(title=title, in_stock=1)
     except IntegrityError:
         return error("That movie already exists")
 
+    return None
+
+
+def delete_movie(request):
+    # Permanently removes a movie that has no copies currently checked out
+    movie = get_movie(request.POST.get("id"))
+
+    if movie is None:
+        return error("Invalid movie id")
+
+    if movie.checked_out_count > 0:
+        return error("Cannot delete a movie while copies are checked out")
+
+    movie.delete()
     return None
 
 

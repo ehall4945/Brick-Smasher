@@ -19,7 +19,7 @@
             {% csrf_token %}
 
             <label for="movie-title">New Movie Title</label>
-            <input id="movie-title" name="title" type="text">
+            <input id="movie-title" name="title" type="text" maxlength="75">
 
             <button type="submit">Add Movie</button>
         </form>
@@ -32,6 +32,7 @@
                     <th>Checked Out</th>
                     <th>Add</th>
                     <th>Remove</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody id="movie-table-body"></tbody>

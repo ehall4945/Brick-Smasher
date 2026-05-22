@@ -9,38 +9,30 @@ from .models import Checkout, Movie, StoreUser
 # ----------------------------
 # Page views
 # ----------------------------
-
 def home(request):
-    # Displays the home menu page
     return render(request, "bricksmasher/home.html")
 
 
 def account_page(request):
-    # Displays the account creation page
     return render(request, "bricksmasher/account.html")
 
 
 def movie_page(request):
-    # Displays the movie management page
     return render(request, "bricksmasher/movie.html")
 
 
 def rent_page(request):
-    # Displays the rental management page
     return render(request, "bricksmasher/rent.html")
 
 
 # ----------------------------
 # JSON helpers
 # ----------------------------
-
 def error(message, status=400):
-    # Sends AJAX errors in one consistent format
     return JsonResponse({"error": message}, status=status)
 
-
+# Following three functions all convert their respective model into a JSON-safe dictionary
 def user_json(user):
-    # Converts a user model into JSON-safe data
     return {
         "id": user.id,
         "first_name": user.first_name,
@@ -50,7 +42,6 @@ def user_json(user):
 
 
 def movie_json(movie):
-    # Converts a movie model into JSON-safe data
     return {
         "id": movie.id,
         "title": movie.title,
@@ -60,7 +51,6 @@ def movie_json(movie):
 
 
 def checkout_json(checkout):
-    # Converts a checkout model into JSON-safe data
     return {
         "id": checkout.id,
         "user": checkout.user.id,
@@ -70,27 +60,25 @@ def checkout_json(checkout):
     }
 
 
+# Returns every movie using the default alphabetical model ordering
 def all_movies_json():
-    # Returns every movie using the default alphabetical model ordering
     return [movie_json(movie) for movie in Movie.objects.all()]
 
 
+# Returns all checked out movies for one user
 def user_checkouts_json(user):
-    # Returns all checked out movies for one user
     checkouts = Checkout.objects.filter(user=user).select_related("movie", "user")
     return [checkout_json(checkout) for checkout in checkouts]
 
 
+# Following two methods return an object or None when the id is invalid
 def get_user(user_id):
-    # Returns a user object or None when the id is invalid
     try:
         return StoreUser.objects.get(id=user_id)
     except StoreUser.DoesNotExist:
         return None
 
-
 def get_movie(movie_id):
-    # Returns a movie object or None when the id is invalid
     try:
         return Movie.objects.get(id=movie_id)
     except Movie.DoesNotExist:
@@ -100,7 +88,6 @@ def get_movie(movie_id):
 # ----------------------------
 # User AJAX endpoint
 # ----------------------------
-
 @require_http_methods(["GET", "POST"])
 def db_user(request):
     # Routes user AJAX requests by HTTP method
@@ -110,8 +97,8 @@ def db_user(request):
     return create_user(request)
 
 
+# Looks up and verifies a member account by email address
 def find_user_by_email(request):
-    # Looks up a member account by email address
     email = request.GET.get("email", "").strip()
 
     if not email:
@@ -125,8 +112,8 @@ def find_user_by_email(request):
     return JsonResponse(user_json(user))
 
 
+# Creates a new member account when the email is unique
 def create_user(request):
-    # Creates a new member account when the email is unique
     first_name = request.POST.get("first_name", "").strip()
     last_name = request.POST.get("last_name", "").strip()
     email = request.POST.get("email", "").strip()
@@ -145,7 +132,6 @@ def create_user(request):
 # ----------------------------
 # Movie AJAX endpoint
 # ----------------------------
-
 @require_http_methods(["GET", "POST"])
 def db_movie(request):
     # Routes movie AJAX requests by HTTP method
@@ -172,10 +158,9 @@ def db_movie(request):
 
 
 def create_movie(request):
-    # Adds a new movie with one copy in stock
     title = request.POST.get("title", "").strip()
 
-    # Ensures you can't add a blank movie title or one that exceeds 75 chars
+    # Ensures that a user can't add a blank movie title or one that exceeds 75 chars
     if not title:
         return error("Movie title cannot be blank")
     
@@ -190,8 +175,8 @@ def create_movie(request):
     return None
 
 
+# Permanently removes a movie that has no copies currently checked out
 def delete_movie(request):
-    # Permanently removes a movie that has no copies currently checked out
     movie = get_movie(request.POST.get("id"))
 
     if movie is None:
@@ -204,8 +189,8 @@ def delete_movie(request):
     return None
 
 
+# Adds or removes one available copy from an existing movie
 def change_movie_stock(request, amount):
-    # Adds or removes one available copy from an existing movie
     movie = get_movie(request.POST.get("id"))
 
     if movie is None:
@@ -223,7 +208,6 @@ def change_movie_stock(request, amount):
 # ----------------------------
 # Rental AJAX endpoint
 # ----------------------------
-
 @require_http_methods(["GET", "POST"])
 def db_rent(request):
     # Routes rental AJAX requests by HTTP method and action 
@@ -241,8 +225,8 @@ def db_rent(request):
     return error("Invalid rental action")
 
 
+# Gets checkout records with optional user and movie filters
 def get_checkouts(request):
-    # Gets checkout records with optional user and movie filters
     user_id = request.GET.get("user")
     movie_id = request.GET.get("movie")
     checkouts = Checkout.objects.select_related("user", "movie")
@@ -260,8 +244,8 @@ def get_checkouts(request):
     return JsonResponse([checkout_json(checkout) for checkout in checkouts], safe=False)
 
 
+# Gets the user and movie needed for rent or return actions
 def get_rental_items(request):
-    # Gets the user and movie needed for rent or return actions
     user = get_user(request.POST.get("user"))
     movie = get_movie(request.POST.get("movie"))
 
@@ -271,8 +255,8 @@ def get_rental_items(request):
     return user, movie, None
 
 
+# Checks out one movie after passing all the rental rules, and updates the movie's in-stock count
 def rent_movie(request):
-    # Checks out one movie after validating all rental rules
     user, movie, problem = get_rental_items(request)
 
     if problem:
@@ -294,8 +278,8 @@ def rent_movie(request):
     return JsonResponse(user_checkouts_json(user), safe=False)
 
 
+# Returns one checked out movie back to available stock, and deletes the checkout record
 def return_movie(request):
-    # Returns one checked out movie back to available stock
     user, movie, problem = get_rental_items(request)
 
     if problem:

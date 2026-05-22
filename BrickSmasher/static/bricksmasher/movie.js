@@ -1,17 +1,16 @@
 function getCsrfToken() {
-    // Reads Django's CSRF token from the form
     return document.querySelector("[name=csrfmiddlewaretoken]").value;
 }
 
+// Updates the movie page message area with the given text and optional type (e.g. "error")
 function showMessage(text, type = "") {
-    // Updates the movie page message area
     const message = document.querySelector("#movie-message");
     message.textContent = text;
     message.className = type ? `message ${type}` : "message";
 }
 
+// Rebuilds the movie table from the server's data
 function renderMovies(movies) {
-    // Rebuilds the movie table from server data
     const tableBody = document.querySelector("#movie-table-body");
     tableBody.innerHTML = "";
 
@@ -24,23 +23,23 @@ function renderMovies(movies) {
             <td>${movie.checked_out}</td>
             <td class="clickable" data-action="add" data-id="${movie.id}">+</td>
             <td class="clickable" data-action="remove" data-id="${movie.id}">-</td>
-            <td class="clickable" data-action="delete" data-id="${movie.id}">Delete</td>
+            <td class="clickable" data-action="delete" data-id="${movie.id}" data-title="${movie.title}">Delete</td>
         `;
 
         tableBody.appendChild(row);
     });
 }
 
+// Loads all the movies as soon as the page opens
 function loadMovies() {
-    // Loads all movies when the page opens
     fetch("/dbMovie/")
         .then(response => response.json())
         .then(movies => renderMovies(movies))
         .catch(() => showMessage("Could not load movies", "error"));
 }
 
+// Sends a movie create, add, or remove request to Django and updates the table on success
 function updateMovie(action, id = null, title = null) {
-    // Sends a movie create, add, or remove request to Django
     const formData = new FormData();
     formData.append("action", action);
 
@@ -72,9 +71,8 @@ function updateMovie(action, id = null, title = null) {
         .catch(() => showMessage("Could not update movie data", "error"));
 }
 
-
+// Adds a new movie from the title input
 document.querySelector("#movie-form").addEventListener("submit", function (event) {
-    // Adds a new movie from the title input
     event.preventDefault();
 
     const titleInput = document.querySelector("#movie-title");
@@ -82,9 +80,8 @@ document.querySelector("#movie-form").addEventListener("submit", function (event
     titleInput.value = "";
 });
 
-
+// Handles the add and remove click functionality from the movie table
 document.querySelector("#movie-table-body").addEventListener("click", function (event) {
-    // Handles add and remove clicks from the movie table
     if (!event.target.classList.contains("clickable")) {
         return;
     }

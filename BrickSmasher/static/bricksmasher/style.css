@@ -1,7 +1,3 @@
-/* ─────────────────────────────────────────────────────────────
-   BrickSmasher — Noir Cinema Dashboard
-   Playfair Display (headings) × DM Sans (body)
-───────────────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 
 /* ── Reset ── */
@@ -54,7 +50,7 @@
     --r-xl:  28px;
 }
 
-/* ── Body ── */
+/* Body */
 body {
     margin: 0;
     min-height: 100vh;
@@ -68,7 +64,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Main container ── */
+/* Main container */
 .container {
     width: min(1160px, 92vw);
     margin: 40px auto;
@@ -100,7 +96,7 @@ body {
     text-transform: uppercase;
 }
 
-/* ── Headings ── */
+/* Headings */
 h1 {
     margin: 0;
     font-family: var(--font-display);
@@ -179,7 +175,7 @@ p {
         box-shadow      0.22s ease;
 }
 
-/* Amber shimmer across the top on hover */
+/* Adds a nice amber shimmer across the top on hover */
 .menu a::before {
     content: '';
     position: absolute;
@@ -194,7 +190,7 @@ p {
     opacity: 1;
 }
 
-/* Description text sits below the title */
+/* Description text sits directly below the title */
 .menu a::after {
     display: block;
     margin-top: 9px;
@@ -210,7 +206,7 @@ p {
 .menu a:nth-child(2)::after { content: "Update inventory and store movie copies"; }
 .menu a:nth-child(3)::after { content: "Check movies in and out for members"; }
 
-/* Centered — title top, description below */
+/* Centered title top, description below */
 .menu a {
     padding: 28px 24px;
     align-items: center;
@@ -333,7 +329,7 @@ button:active {
 }
 
 /* ──────────────────────────────────────────
-   Tables — scrollable on mobile
+   Tables: scrollable on mobile
 ─────────────────────────────────────────── */
 table {
     display: block;

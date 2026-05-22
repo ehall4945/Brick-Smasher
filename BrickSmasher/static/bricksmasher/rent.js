@@ -1,19 +1,18 @@
 let currentUser = null;
 
 function getCsrfToken() {
-    // Reads Django's CSRF token from the hidden form
     return document.querySelector("[name=csrfmiddlewaretoken]").value;
 }
 
+// Updates the rental page message area with the given text and optional type (ex: "error")
 function showMessage(text, type = "") {
-    // Updates the rental page message area
     const message = document.querySelector("#rent-message");
     message.textContent = text;
     message.className = type ? `message ${type}` : "message";
 }
 
+// Displays the selected member's checked out movies
 function renderCheckedOut(checkouts) {
-    // Displays the selected member's checked out movies
     const tableBody = document.querySelector("#checked-out-body");
     tableBody.innerHTML = "";
 
@@ -29,9 +28,9 @@ function renderCheckedOut(checkouts) {
     });
 }
 
+// Displays only the movies that have at least one copy in stock
 function renderAvailableMovies(movies) {
-    // Displays only movies with at least one copy in stock
-    const tableBody = document.querySelector("#available-movies-body");
+    const tableBody = document.querySelector("#available-movies-body"); 
     tableBody.innerHTML = "";
 
     movies
@@ -49,8 +48,8 @@ function renderAvailableMovies(movies) {
         });
 }
 
+// Reloads both rental tables for the current member
 function refreshRentalTables() {
-    // Reloads both rental tables for the current member
     if (!currentUser) {
         return;
     }
@@ -66,8 +65,8 @@ function refreshRentalTables() {
         .catch(() => showMessage("Could not refresh rental data", "error"));
 }
 
+// Finds a member by email and then loads their rental tables
 function findMember(email) {
-    // Finds a member by email and then loads their rental tables
     fetch(`/dbUser/?email=${encodeURIComponent(email)}`)
         .then(response => response.json().then(data => ({ ok: response.ok, data })))
         .then(result => {
@@ -87,8 +86,8 @@ function findMember(email) {
         .catch(() => showMessage("Could not find member", "error"));
 }
 
+// Sends a rent or return request for the selected movie, and refreshes the tables on success
 function updateRental(action, movieId) {
-    // Sends a rent or return request for the selected movie
     if (!currentUser) {
         showMessage("Search for a member first", "error");
         return;
@@ -119,21 +118,21 @@ function updateRental(action, movieId) {
         .catch(() => showMessage("Could not update rental data", "error"));
 }
 
+// Searches for the member entered in the email field when the form is submitted
 document.querySelector("#user-search-form").addEventListener("submit", function (event) {
-    // Searches for the member entered in the email field
     event.preventDefault();
     findMember(document.querySelector("#member-email").value.trim());
 });
 
+// Returns a checked out movie when its row is clicked
 document.querySelector("#checked-out-body").addEventListener("click", function (event) {
-    // Returns a checked out movie when its row is clicked
     if (event.target.classList.contains("clickable")) {
         updateRental("return", event.target.dataset.movie);
     }
 });
 
+// Rents an available movie when its row is clicked
 document.querySelector("#available-movies-body").addEventListener("click", function (event) {
-    // Rents an available movie when its row is clicked
     if (event.target.classList.contains("clickable")) {
         updateRental("rent", event.target.dataset.movie);
     }
